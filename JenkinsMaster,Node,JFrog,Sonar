@@ -1,0 +1,156 @@
+
+How to add jenkins_master, jenkins_node , Sonar and Jfrog
+--------Install & Configure Jenkins Master------
+1 . Create a Jenkins Jenkins_Master  with ubuntu 20
+connect -> ssh -->paste 
+sudo -i
+sudo apt-get update
+
+2. Isntall Openjdk -11
+sudo apt-get install openjdk-11-jdk
+
+3. Install maven
+sudo apt-get install maven
+
+4. Install git
+sudo apt-get install git
+java --version    //openjdk version "11.0.20.1" 2023-08-24
+mvn --version	  //Apache Maven 3.6.3
+git --version	  // git version 2.25.1
+
+
+5. Install Jenkins 
+ curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+    /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+    https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+    /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+  sudo apt-get update
+  sudo apt-get install jenkins
+
+6. Add Jenkins user with password
+#password:jenkins
+diksha
+diksha
+
+7. Make Jenkins User as sudoer
+visudo 
+jenkins ALL = (ALL) NOPASSWD : ALL
+
+8. Give Password Authentication
+vi /etc/ssh/sshd_config
+password authentication  yes
+
+9. Restart ssh service 
+service ssh restart
+
+
+----------Install & Configure Jenkins Nodes --------------
+10. Create a ubuntu linux server 
+onnect -> ssh -->paste 
+sudo -i
+sudo apt-get update
+
+11. Isntall Openjdk -11
+sudo apt-get install openjdk-11-jdk
+
+12.Install maven
+sudo apt-get install maven
+
+13.Install git
+sudo apt-get install git
+java --version    //openjdk version "11.0.20.1" 2023-08-24
+mvn --version	  //Apache Maven 3.6.3
+git --version	  // git version 2.25.1
+
+14 . No need to install jenkins at node side
+
+15. Add Jenkins User with password 
+#adduser jenkins
+
+16. 
+
+
+
+3.139.57.80 : Jenkins Master Public IP
+18.117.190.40:Jenkins node public IP
+
+Add Jfrog:------------------------------------------------------------------------------------------------------
+MFS088@MFS088 MINGW64 ~/Downloads (main)
+$ ssh -i "MyJfrogKey18-09-2023.pem" ec2-user@ec2-18-223-252-218.us-east-2.compute.amazonaws.com
+[ec2-user@ip-172-31-22-44 ~]$ sudo -i
+
+[root@ip-172-31-22-44 ~]# yum update
+
+
+
+[root@ip-172-31-22-44 ~]# sudo yum install java-1.8.0-openjdk
+
+
+[root@ip-172-31-22-44 ~]# yum install wget
+
+
+[root@ip-172-31-22-44 ~]# wget https://releases.jfrog.io/artifactory/artifactory-pro-rpms/artifactory-pro-rpms.repo -O jfrog-artifactory-pro-rpms.repo;
+--2023-09-18 11:19:29--  https://releases.jfrog.io/artifactory/artifactory-pro-rpms/artifactory-pro-rpms.repo
+Resolving releases.jfrog.io (releases.jfrog.io)... 3.221.179.99, 50.17.28.229, 54.221.82.220
+
+[root@ip-172-31-22-44 ~]# sudo yum install jfrog-artifactory-pro
+
+systemctl start artifactory.service
+  
+Start Artifactory with:
+> systemctl start artifactory.service
+
+Check Artifactory status with:
+> systemctl status artifactory.service
+
+
+--------------------------SonarQube -------------------------------------------------------------
+launch instance with Redhat 9 
+t2.medium 
+select or create a key pair
+n/w setting edit to all traffic anywhere 
+select 10GB RAM ---> Launch instance 
+
+
+Connect to instance and execute following commands : 
+Install sonar on Redhat linux on AWS
+
+1) An redhat EC2 instance with a minimum of 2 GB RAM
+2) # yum update
+3) # sudo yum install java-11-openjdk
+4) # cd /opt
+5) # yum install wget
+6) # wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.10.61524.zip
+7) # yum install unzip
+8) # unzip /opt/sonarqube-8.9.10.61524.zip
+9) # adduser sonaruser
+10) # chown -R sonaruser:sonaruser /opt/sonarqube-8.9.10.61524
+11) # su sonaruser
+12) $ cd /opt/sonarqube-8.9.10.61524
+13) $ cd bin/linux-x86-64
+14) $ ./sonar.sh start
+15) http://3.135.238.108:9000
+16) User name : admin ; passwd : diksha
+
+sonar with jenkins
+
+On Jenkins Server:
+1. Install Sonarqube Scanner plugin on jenkins server
+2. Add Sonarqube to jenkins "configure system" on jenkins server
+3. Install Sonar Scanner 3.2.0.1227 “goble tool configuration” on jenkins server
+4. Run Pipeline job on jenkins server
+
+Configure the JOB for Sonar
+sonar.login=admin
+sonar.password=Maha@Maha@123456!@#
+sonar.projectKey=mySonarJob01
+sonar.projectName=mySonarJob01
+sonar.projectVersion=1.0
+sonar.sources=.
+sonar.java.binaries=/home/jenkins/workspace/mySonarJob01/target/classes
+
+
+
